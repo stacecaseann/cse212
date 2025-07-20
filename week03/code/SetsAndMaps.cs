@@ -22,7 +22,34 @@ public static class SetsAndMaps
     public static string[] FindPairs(string[] words)
     {
         // TODO Problem 1 - ADD YOUR CODE HERE
-        return [];
+        /// For example, if words was: [am, at, ma, if, fi], we would return :
+        ///
+        /// ["am & ma", "if & fi"]
+        HashSet<string> origWords = [.. words];
+        HashSet<string> newWords = [];
+        HashSet<string> usedWords = [];
+        for (int i = 0; i < words.Length; i++)
+        {
+            var word = words[i];
+            var backwards = string.Concat(word.ToCharArray().Reverse());
+            // var backwardsArray = new List<char>();
+            // for (int j = word.Length; j > 0; j--)
+            // {
+            //     backwardsArray.Add(word[j - 1]);
+            // }
+
+            // var backwards = string.Concat(backwardsArray);
+            if (word != backwards
+                && origWords.Contains(backwards)
+                && !usedWords.Contains(word)
+                && !usedWords.Contains(backwards))
+            {
+                usedWords.Add(word);
+                usedWords.Add(backwards);
+                newWords.Add($"{backwards} & {word}");
+            }
+        }
+        return newWords.ToArray();
     }
 
     /// <summary>
@@ -42,7 +69,16 @@ public static class SetsAndMaps
         foreach (var line in File.ReadLines(filename))
         {
             var fields = line.Split(",");
-            // TODO Problem 2 - ADD YOUR CODE HERE
+            var degree = fields[3];
+
+            if (degrees.ContainsKey(degree))
+            {
+                degrees[degree]++;
+            }
+            else
+            {
+                degrees[degree] = 1;
+            }
         }
 
         return degrees;
@@ -66,9 +102,40 @@ public static class SetsAndMaps
     /// </summary>
     public static bool IsAnagram(string word1, string word2)
     {
-        // TODO Problem 3 - ADD YOUR CODE HERE
-        return false;
+        var firstWordDict = CreateDictionary(word1);
+        var secondWordDict = CreateDictionary(word2);
+
+        if (firstWordDict.Keys.Count != secondWordDict.Keys.Count)
+            return false;
+        foreach (var key in firstWordDict.Keys)
+        {
+            if (!secondWordDict.ContainsKey(key))
+                return false;
+            if (secondWordDict.ContainsKey(key) && secondWordDict[key] != firstWordDict[key])
+                return false;
+        }
+        return true;
     }
+
+    private static Dictionary<string, int> CreateDictionary(string word)
+    {
+        Dictionary<string, int> wordDict = [];
+        word = word.Replace(" ", "");
+        for (int i = 0; i < word.Length; i++)
+        {
+            var letter = word[i].ToString().ToLower();
+            if (wordDict.ContainsKey(letter))
+            {
+                wordDict[letter]++;
+            }
+            else
+            {
+                wordDict[letter] = 1;
+            }
+        }
+        return wordDict;
+    }
+
 
     /// <summary>
     /// This function will read JSON (Javascript Object Notation) data from the 
@@ -96,6 +163,7 @@ public static class SetsAndMaps
 
         var featureCollection = JsonSerializer.Deserialize<FeatureCollection>(json, options);
 
+        var test = 1;
         // TODO Problem 5:
         // 1. Add code in FeatureCollection.cs to describe the JSON using classes and properties 
         // on those classes so that the call to Deserialize above works properly.

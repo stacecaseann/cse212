@@ -19,55 +19,55 @@ public class CustomerServiceSolution {
         service.ServeCustomer();
         // Defect(s) Found: This found that the ServeCustomer should get the customer before deleting from the list
 
-        Console.WriteLine("=================");
+        // Console.WriteLine("=================");
 
-        // Test 2
-        // Scenario: Can I add two customers and then serve the customers in the right order?
-        // Expected Result: This should display the customers in the same order that they were entered
-        Console.WriteLine("Test 2");
-        service = new CustomerServiceSolution(4);
-        service.AddNewCustomer();
-        service.AddNewCustomer();
-        Console.WriteLine($"Before serving customers: {service}");
-        service.ServeCustomer();
-        service.ServeCustomer();
-        Console.WriteLine($"After serving customers: {service}");
-        // Defect(s) Found: None :)
+        // // Test 2
+        // // Scenario: Can I add two customers and then serve the customers in the right order?
+        // // Expected Result: This should display the customers in the same order that they were entered
+        // Console.WriteLine("Test 2");
+        // service = new CustomerServiceSolution(4);
+        // service.AddNewCustomer();
+        // service.AddNewCustomer();
+        // Console.WriteLine($"Before serving customers: {service}");
+        // service.ServeCustomer();
+        // service.ServeCustomer();
+        // Console.WriteLine($"After serving customers: {service}");
+        // // Defect(s) Found: None :)
 
-        Console.WriteLine("=================");
+        // Console.WriteLine("=================");
 
-        // Test 3
-        // Scenario: Can I serve a customer if there is no customer?
-        // Expected Result: This should display some error message
-        Console.WriteLine("Test 3");
-        service = new CustomerServiceSolution(4);
-        service.ServeCustomer();
-        // Defect(s) Found: This found that I need to check the length in serve_customer and display an error message
+        // // Test 3
+        // // Scenario: Can I serve a customer if there is no customer?
+        // // Expected Result: This should display some error message
+        // Console.WriteLine("Test 3");
+        // service = new CustomerServiceSolution(4);
+        // service.ServeCustomer();
+        // // Defect(s) Found: This found that I need to check the length in serve_customer and display an error message
 
-        Console.WriteLine("=================");
+        // Console.WriteLine("=================");
 
-        // Test 4
-        // Scenario: Does the max queue size get enforced?
-        // Expected Result: This should display some error message when the 5th one is added
-        Console.WriteLine("Test 4");
-        service = new CustomerServiceSolution(4);
-        service.AddNewCustomer();
-        service.AddNewCustomer();
-        service.AddNewCustomer();
-        service.AddNewCustomer();
-        service.AddNewCustomer();
-        Console.WriteLine($"Service Queue: {service}");
-        // Defect(s) Found: This found that I need to do >= instead of > in AddNewCustomer
+        // // Test 4
+        // // Scenario: Does the max queue size get enforced?
+        // // Expected Result: This should display some error message when the 5th one is added
+        // Console.WriteLine("Test 4");
+        // service = new CustomerServiceSolution(4);
+        // service.AddNewCustomer();
+        // service.AddNewCustomer();
+        // service.AddNewCustomer();
+        // service.AddNewCustomer();
+        // service.AddNewCustomer();
+        // Console.WriteLine($"Service Queue: {service}");
+        // // Defect(s) Found: This found that I need to do >= instead of > in AddNewCustomer
 
-        Console.WriteLine("=================");
+        // Console.WriteLine("=================");
 
-        // Test 5
-        // Scenario: Does the max size get defaulted to 10 if an invalid value is provided?
-        // Expected Result: It should display 10
-        Console.WriteLine("Test 5");
-        service = new CustomerServiceSolution(0);
-        Console.WriteLine($"Size should be 10: {service}");
-        // Defect(s) Found: None :)
+        // // Test 5
+        // // Scenario: Does the max size get defaulted to 10 if an invalid value is provided?
+        // // Expected Result: It should display 10
+        // Console.WriteLine("Test 5");
+        // service = new CustomerServiceSolution(0);
+        // Console.WriteLine($"Size should be 10: {service}");
+        // // Defect(s) Found: None :)
     }
 
     private readonly List<Customer> _queue = new();
