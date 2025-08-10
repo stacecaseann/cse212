@@ -1,4 +1,8 @@
 using System.Collections;
+using System.Data;
+using System.Diagnostics.CodeAnalysis;
+using System.Reflection.Metadata.Ecma335;
+using System.Security.Cryptography.X509Certificates;
 
 public static class Recursion
 {
@@ -14,8 +18,10 @@ public static class Recursion
     /// </summary>
     public static int SumSquaresRecursive(int n)
     {
-        // TODO Start Problem 1
-        return 0;
+        if (n <= 0)
+            return 0;
+        return n * n + SumSquaresRecursive(n - 1);
+        //smaller problem n-1
     }
 
     /// <summary>
@@ -39,7 +45,25 @@ public static class Recursion
     /// </summary>
     public static void PermutationsChoose(List<string> results, string letters, int size, string word = "")
     {
-        // TODO Start Problem 2
+        if (word.Length == size)
+        {
+            results.Add(word);
+            return;
+        }
+        else
+        {
+            for (var i = 0; i < letters.Length; i++)
+            {
+                // Make a copy of the letters to pass to the
+                // the next call to permutations.  We need
+                // to remove the letter we just added before
+                // we call permutations again.
+                var lettersLeft = letters.Remove(i, 1);
+
+                // Add the new letter to the word we have so far
+                PermutationsChoose(results, lettersLeft, size, word + letters[i]);
+            }
+        }
     }
 
     /// <summary>
@@ -48,7 +72,7 @@ public static class Recursion
     /// #############
     /// Imagine that there was a staircase with 's' stairs.  
     /// We want to count how many ways there are to climb 
-    /// the stairs.  If the person could only climb one 
+    ///0 the stairs.  If the person could only climb one 
     /// stair at a time, then the total would be just one.  
     /// However, if the person could choose to climb either 
     /// one, two, or three stairs at a time (in any order), 
@@ -86,6 +110,7 @@ public static class Recursion
     /// </summary>
     public static decimal CountWaysToClimb(int s, Dictionary<int, decimal>? remember = null)
     {
+        remember ??= new Dictionary<int, decimal>();
         // Base Cases
         if (s == 0)
             return 0;
@@ -96,10 +121,13 @@ public static class Recursion
         if (s == 3)
             return 4;
 
+        if (remember.TryGetValue(s, out decimal value))
+            return value;
         // TODO Start Problem 3
 
         // Solve using recursion
-        decimal ways = CountWaysToClimb(s - 1) + CountWaysToClimb(s - 2) + CountWaysToClimb(s - 3);
+        decimal ways = CountWaysToClimb(s - 1,remember) + CountWaysToClimb(s - 2,remember) + CountWaysToClimb(s - 3,remember);
+        remember[s] = ways;
         return ways;
     }
 
@@ -118,7 +146,18 @@ public static class Recursion
     /// </summary>
     public static void WildcardBinary(string pattern, List<string> results)
     {
-        // TODO Start Problem 4
+        int indexOfWildcard = pattern.IndexOf("*");
+        if (indexOfWildcard == -1)
+        {
+            results.Add(pattern);
+            return;
+        }
+        int[] replaceStrings = [0, 1];
+        foreach (var replaceString in replaceStrings)
+        {
+            pattern = pattern[..indexOfWildcard] + replaceString + pattern[(indexOfWildcard + 1)..];
+            WildcardBinary(pattern, results);
+        }
     }
 
     /// <summary>
@@ -129,15 +168,42 @@ public static class Recursion
     {
         // If this is the first time running the function, then we need
         // to initialize the currPath list.
-        if (currPath == null) {
+        if (currPath == null)
+        {
             currPath = new List<ValueTuple<int, int>>();
         }
-        
-        // currPath.Add((1,2)); // Use this syntax to add to the current path
+        if (!maze.IsValidMove(currPath, x, y))
+            return;
+        currPath.Add((x, y));
+        if (maze.IsEnd(x, y))
+        {
+            results.Add(currPath.AsString());
+        }
+        foreach (var move in GetValidMoves(x, y))
+        {
+            SolveMaze(results, maze, move.Item1, move.Item2, currPath);
+        }
+        currPath.RemoveAt(currPath.Count - 1);
+    }
 
-        // TODO Start Problem 5
-        // ADD CODE HERE
-
-        // results.Add(currPath.AsString()); // Use this to add your path to the results array keeping track of complete maze solutions when you find the solution.
+    public static ValueTuple<int, int>[] GetValidMoves(int x, int y)
+    {
+        return [MoveRight(x, y), MoveLeft(x, y), MoveUp(x, y), MoveDown(x, y)];
+    }
+    public static ValueTuple<int, int> MoveRight(int x, int y)
+    {
+        return new ValueTuple<int, int>(x + 1, y);
+    }
+    public static ValueTuple<int, int> MoveLeft(int x, int y)
+    {
+        return new ValueTuple<int, int>(x - 1, y);
+    }
+    public static ValueTuple<int, int> MoveUp(int x, int y)
+    {
+        return new ValueTuple<int, int>(x, y - 1);
+    }
+    public static ValueTuple<int, int> MoveDown(int x, int y)
+    {
+        return new ValueTuple<int, int>(x, y + 1);
     }
 }
